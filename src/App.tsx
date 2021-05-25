@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { simpleNoise2D } from "./Noise/noise";
+import { Vector2 } from "./Noise/mathUtils";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -22,7 +23,7 @@ function App() {
 
     ctx.putImageData(imageData, 0, 0);
 
-    console.log(imageData);
+    console.log(new Vector2(1, 1).normalized);
   }, []);
 
   return (
