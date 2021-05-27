@@ -1,23 +1,40 @@
 import { Vector2 } from "./mathUtils";
+import { Noise } from "./noise";
+
+enum NoiseType {
+  Value,
+  Perlin,
+}
 
 // function that returns noise texture based on passed parameters
 const getImageData = (
-  noiseFunction: (v: Vector2, f: number) => number,
   width: number,
-  height: number
+  height: number,
+  noiseType: NoiseType,
+  dimension: number,
+  frequency: number,
+  offsetX: number,
+  offsetY: number
 ) => {
   const imageData = new ImageData(width, height);
   const stepSize = 1 / width;
 
   for (let y = 0; y < imageData.height; y++) {
     for (let x = 0; x < imageData.width; x++) {
-      const idx = (y * imageData.width + x) * 4; // calculate pixel index
-      const xCoord = (x + 0.5) * stepSize; // remap because of positive y down
-      const yCoord = (imageData.height - y + 0.5) * stepSize; // remap to positive y up
-      const point = new Vector2(xCoord, yCoord);
+      const point = new Vector2(
+        (x + 0.5) * stepSize - 0.5,
+        (y + 0.5) * stepSize - 0.5
+      );
+      point.x += offsetX;
+      point.y += offsetY;
 
-      const val = noiseFunction(point, 32) * 0.5 + 0.5;
+      const noiseFunction = Noise.noiseFunctions[noiseType][dimension - 1];
+      let val = noiseFunction(point, frequency);
+      if (noiseType === NoiseType.Perlin) {
+        val = val * 0.5 + 0.5;
+      }
 
+      const idx = ((imageData.height - y - 1) * imageData.width + x) * 4; // calculate pixel index so that positive y is up
       // set color data for single pixel (rgba)
       // adding offset of 0.5 because so te pixel origin lies in midlle of top left corner
       imageData.data[idx] = 255 * val; // red
@@ -26,6 +43,26 @@ const getImageData = (
       imageData.data[idx + 3] = 255; // force alpha to be always 100%
     }
   }
+  return imageData;
+};
+const getUVImageData = (width: number, height: number) => {
+  const imageData = new ImageData(width, height);
+  const stepSize = 1 / width;
+
+  for (let y = 0; y < imageData.height; y++) {
+    for (let x = 0; x < imageData.width; x++) {
+      const point = new Vector2((x + 0.5) * stepSize, (y + 0.5) * stepSize);
+
+      const idx = ((imageData.height - y - 1) * imageData.width + x) * 4; // calculate pixel index so that positive y is up
+      // set color data for single pixel (rgba)
+      // adding offset of 0.5 because so te pixel origin lies in midlle of top left corner
+      imageData.data[idx] = 255 * point.x; // red
+      imageData.data[idx + 1] = 255 * point.y; // green (remapping to positive y up)
+      imageData.data[idx + 2] = 0; // blue
+      imageData.data[idx + 3] = 255; // force alpha to be always 100%
+    }
+  }
+  return imageData;
 };
 
-export {};
+export { getImageData, getUVImageData, NoiseType };
