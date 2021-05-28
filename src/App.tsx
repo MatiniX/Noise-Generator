@@ -1,9 +1,6 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import {
-  getImageData,
-  getUVImageData,
-  NoiseType,
-} from "./Noise/imageGenerator";
+import InteractiveInput from "./components/InteractiveInput";
+import { getImageData, getUVImageData, NoiseType } from "./Noise/imageGenerator";
 import { Vector2 } from "./Noise/mathUtils";
 
 function App() {
@@ -11,42 +8,41 @@ function App() {
   const [canvasScale, setCanvasScale] = useState(1);
   const [noiseType, setNoiseType] = useState(NoiseType.Value);
   const [dimension, setDimension] = useState(1);
-  const [frequecny, setFrequency] = useState(1);
+  const [frequecny, setFrequency] = useState(4);
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
+  const [octaves, setOctaves] = useState(1);
+  const [lacunarity, setLacunarity] = useState(2.0);
+  const [persistance, setPersistance] = useState(0.5);
 
+  // Default setup
   useEffect(() => {
     const ctx = canvasRef.current.getContext("2d")!;
     setCanvasScale(512 / canvasRef.current.width);
     // clear canvas
-    ctx.putImageData(
-      new ImageData(canvasRef.current.width, canvasRef.current.height),
-      0,
-      0
-    );
+    ctx.putImageData(new ImageData(canvasRef.current.width, canvasRef.current.height), 0, 0);
     const imageData = getImageData(
       canvasRef.current.width,
       canvasRef.current.height,
-      noiseType,
-      dimension,
-      frequecny,
-      offsetX,
-      offsetY
+      NoiseType.Value,
+      1,
+      1,
+      0,
+      0,
+      1,
+      2,
+      0.5
     );
     console.log(canvasRef.current.width, canvasRef.current.height);
 
     ctx.putImageData(imageData, 0, 0);
   }, []);
 
+  // Rerender when parameters change
   useEffect(() => {
     const ctx = canvasRef.current.getContext("2d")!;
     setCanvasScale(512 / canvasRef.current.width);
-    // clear canvas
-    ctx.putImageData(
-      new ImageData(canvasRef.current.width, canvasRef.current.height),
-      0,
-      0
-    );
+
     const imageData = getImageData(
       canvasRef.current.width,
       canvasRef.current.height,
@@ -54,12 +50,15 @@ function App() {
       dimension,
       frequecny,
       offsetX,
-      offsetY
+      offsetY,
+      octaves,
+      lacunarity,
+      persistance
     );
     console.log(canvasRef.current.width, canvasRef.current.height);
 
     ctx.putImageData(imageData, 0, 0);
-  }, [noiseType, dimension, frequecny, offsetX, offsetY]);
+  }, [noiseType, dimension, frequecny, offsetX, offsetY, octaves, lacunarity, persistance]);
 
   const handleNoiseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     switch (e.target.value) {
@@ -71,6 +70,10 @@ function App() {
         setNoiseType(NoiseType.Perlin);
         console.log("set to perlin");
         break;
+      case "simplex":
+        setNoiseType(NoiseType.Simplex);
+        console.log("set to simplex");
+        break;
 
       default:
         throw new Error("Unknow noise type!");
@@ -79,72 +82,78 @@ function App() {
   const handleDimensionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setDimension(parseInt(e.target.value));
   };
-  const handleFrequencyChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newFrequency = Math.max(0.001, parseFloat(e.target.value));
-    setFrequency(newFrequency);
-  };
-  const handleOffsetXChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setOffsetX(parseFloat(e.target.value));
-  };
-  const handleOffsetYChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setOffsetY(parseFloat(e.target.value));
-  };
 
   return (
     <div>
       <h1>Noise generator</h1>
-      <canvas
-        ref={canvasRef}
-        width="512"
-        height="512"
-        style={{ transform: `scale(${canvasScale})` }}
-      ></canvas>
+      <div className="canvas-container">
+        <canvas ref={canvasRef} width="512" height="512"></canvas>
+      </div>
+
       <br />
-      <select
-        name="noiseType"
-        id="noiseType"
-        onChange={(e) => handleNoiseTypeChange(e)}
-      >
+      <select name="noiseType" id="noiseType" onChange={(e) => handleNoiseTypeChange(e)}>
         <option value="value">Value</option>
         <option value="perlin">Perlin</option>
+        <option value="simplex">Simplex</option>
       </select>
-      <select
-        name="dimension"
-        id="dimesnion"
-        onChange={(e) => handleDimensionChange(e)}
-      >
+      <select name="dimension" id="dimesnion" onChange={(e) => handleDimensionChange(e)}>
         <option value={1}>1D</option>
         <option value={2}>2D</option>
       </select>
       <div>
-        <label htmlFor="frequency" style={{ color: "white" }}>
-          Frequency
-        </label>
-        <input
+        <InteractiveInput
+          label="Frequency"
           id="frequency"
-          type="number"
-          onChange={(e) => handleFrequencyChange(e)}
-          value={frequecny}
+          defaultValue={4}
+          setParameter={setFrequency}
         />
       </div>
       <div>
-        <label htmlFor="offsetX" style={{ color: "white" }}>
-          Offset X
-        </label>
-        <input
-          id="offsetX"
-          type="number"
-          onChange={(e) => handleOffsetXChange(e)}
-          value={offsetX}
+        <InteractiveInput
+          label="Offset X"
+          id="ofssetX"
+          defaultValue={0}
+          setParameter={setOffsetX}
         />
-        <label htmlFor="offsetY" style={{ color: "white" }}>
-          Offset Y
-        </label>
+        {dimension > 1 && (
+          <InteractiveInput
+            label="Offset Y"
+            id="offsetY"
+            defaultValue={0}
+            setParameter={setOffsetY}
+          />
+        )}
+      </div>
+      <div>
+        <label htmlFor="octaves">Octaves</label>
         <input
-          id="offsetY"
-          type="number"
-          onChange={(e) => handleOffsetYChange(e)}
-          value={offsetY}
+          type="range"
+          min={1}
+          max={8}
+          value={octaves}
+          onChange={(e) => setOctaves(parseInt(e.target.value))}
+        />
+      </div>
+      <div>
+        <label htmlFor="lacunarity">Lacunarity</label>
+        <input
+          type="range"
+          min={1.0}
+          max={4.0}
+          step="0.01"
+          value={lacunarity}
+          onChange={(e) => setLacunarity(parseFloat(e.target.value))}
+        />
+      </div>
+      <div>
+        <label htmlFor="persistance">Persistance</label>
+        <input
+          type="range"
+          min={0.0}
+          max={1.0}
+          step="0.001"
+          value={persistance}
+          onChange={(e) => setPersistance(parseFloat(e.target.value))}
         />
       </div>
     </div>

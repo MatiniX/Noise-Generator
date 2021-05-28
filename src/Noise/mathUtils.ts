@@ -1,3 +1,7 @@
+const sqrt2 = Math.sqrt(2);
+const squaresToTriangles = (3 - Math.sqrt(3)) / 6;
+const trainglesToSquares = (Math.sqrt(3) - 1) / 2;
+
 // simple linear interpolation function
 const lerp = (a: number, b: number, t: number) => {
   return a + (b - a) * t;
@@ -28,4 +32,12 @@ class Vector2 {
   }
 }
 
-export { lerp, smooth, dot, Vector2 };
+export {
+  lerp,
+  smooth,
+  dot,
+  Vector2,
+  sqrt2,
+  squaresToTriangles,
+  trainglesToSquares,
+};

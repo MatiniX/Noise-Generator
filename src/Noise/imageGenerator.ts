@@ -4,6 +4,7 @@ import { Noise } from "./noise";
 enum NoiseType {
   Value,
   Perlin,
+  Simplex,
 }
 
 // function that returns noise texture based on passed parameters
@@ -14,7 +15,10 @@ const getImageData = (
   dimension: number,
   frequency: number,
   offsetX: number,
-  offsetY: number
+  offsetY: number,
+  octaves: number,
+  lacunarity: number,
+  persistance: number
 ) => {
   const imageData = new ImageData(width, height);
   const stepSize = 1 / width;
@@ -29,10 +33,16 @@ const getImageData = (
       point.y += offsetY;
 
       const noiseFunction = Noise.noiseFunctions[noiseType][dimension - 1];
-      let val = noiseFunction(point, frequency);
-      if (noiseType === NoiseType.Perlin) {
-        val = val * 0.5 + 0.5;
-      }
+      let val = Noise.Sum(
+        noiseFunction,
+        point,
+        frequency,
+        octaves,
+        lacunarity,
+        persistance
+      );
+
+      val = val * 0.5 + 0.5;
 
       const idx = ((imageData.height - y - 1) * imageData.width + x) * 4; // calculate pixel index so that positive y is up
       // set color data for single pixel (rgba)
