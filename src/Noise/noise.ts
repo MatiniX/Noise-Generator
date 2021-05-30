@@ -6,23 +6,26 @@ import {
   sqrt2,
   trainglesToSquares,
   squaresToTriangles,
+  random2,
+  fract,
 } from "./mathUtils";
 
 type NoiseFunction = (p: Vector2, f: number) => number;
 
 class Noise {
-  static valueFunctions = [Noise.value1d, Noise.value2d];
-  static perlinFunctions = [Noise.perlin1d, Noise.perlin2d];
-  static simplexFunctions = [Noise.simplexValue1d, Noise.simplexValue2d];
+  private static valueFunctions = [Noise.value1d, Noise.value2d];
+  private static perlinFunctions = [Noise.perlin1d, Noise.perlin2d];
+  private static simplexFunctions = [Noise.simplexValue1d, Noise.simplexValue2d];
   public static noiseFunctions = [
     Noise.valueFunctions,
     Noise.perlinFunctions,
     Noise.simplexFunctions,
+    [Noise.worleyNoise],
   ];
 
   // same hashTable as Ken Perlin uses in his refernece
   // array size is double the hashMask to avoid unescescary masking
-  static hashTable = [
+  private static hashTable = [
     151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69,
     142, 8, 99, 37, 240, 21, 10, 23, 190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219,
     203, 117, 35, 11, 32, 57, 177, 33, 88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175,
@@ -52,10 +55,10 @@ class Noise {
     78, 66, 215, 61, 156, 180,
   ];
 
-  static gradients1D = [-1, 1];
-  static gradientsMask1D = 1;
+  private static gradients1D = [-1, 1];
+  private static gradientsMask1D = 1;
 
-  static gradients2D = [
+  private static gradients2D = [
     new Vector2(1, 0),
     new Vector2(-1, 0),
     new Vector2(0, 1),
@@ -65,9 +68,9 @@ class Noise {
     new Vector2(1, -1).normalized,
     new Vector2(-1, -1).normalized,
   ];
-  static gradientsMask2D = 7;
+  private static gradientsMask2D = 7;
 
-  static hashMask = 255;
+  private static hashMask = 255;
 
   simpleNoise2D = (width: number, height: number) => {
     const imageData = new ImageData(width, height);
@@ -149,6 +152,8 @@ class Noise {
     let t1 = t0 - 1;
     i0 &= Noise.hashMask;
     let i1 = i0 + 1;
+
+    console.log(`t0: ${t0}, t1: ${t1}`);
 
     let g0 = Noise.gradients1D[Noise.hashTable[i0] & Noise.gradientsMask1D];
     let g1 = Noise.gradients1D[Noise.hashTable[i1] & Noise.gradientsMask1D];
@@ -253,6 +258,39 @@ class Noise {
     }
 
     return sample * (8 * (2 / Noise.hashMask)) - 1;
+  }
+
+  /** WORLEY NOISE */
+
+  public static worleyNoise(p: Vector2, scale: number) {
+    // create copy and apply scale
+    let point = new Vector2(p.x, p.y);
+    point.x *= scale;
+    point.y *= scale;
+
+    // integer portion of point coordinates
+    const ix = Math.floor(point.x);
+    const iy = Math.floor(point.y);
+    // fractional portion of point coordinates
+    const fx = fract(point.x);
+    const fy = fract(point.y);
+
+    let minDst = 1;
+
+    // loop to check neighbour cells
+    for (let y = -1; y <= 1; y++) {
+      for (let x = -1; x <= 1; x++) {
+        const neighbor = new Vector2(x, y); // get neighbour
+        const point = random2(new Vector2(neighbor.x + ix, neighbor.y + iy)); // get position of point in neighbour cell
+
+        const diff = new Vector2(neighbor.x + point.x - fx, neighbor.y + point.y - fy); // calculate difference vector pixel and point
+
+        const dist = diff.lenght; // distance to point
+        minDst = Math.min(minDst, dist);
+      }
+    }
+
+    return minDst * 2 - 1;
   }
 
   public static Sum(

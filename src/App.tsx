@@ -1,7 +1,13 @@
+import { markTimeline } from "console";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import InteractiveInput from "./components/InteractiveInput";
-import { getImageData, getUVImageData, NoiseType } from "./Noise/imageGenerator";
-import { Vector2 } from "./Noise/mathUtils";
+import {
+  getImageData,
+  getUVImageData,
+  getWorleyNoiseImageData,
+  NoiseType,
+} from "./Noise/imageGenerator";
+import { Vector2, random2 } from "./Noise/mathUtils";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -19,7 +25,7 @@ function App() {
   useEffect(() => {
     const ctx = canvasRef.current.getContext("2d")!;
     setCanvasScale(512 / canvasRef.current.width);
-    // clear canvas
+    // set default values
     ctx.putImageData(new ImageData(canvasRef.current.width, canvasRef.current.height), 0, 0);
     const imageData = getImageData(
       canvasRef.current.width,
@@ -33,9 +39,10 @@ function App() {
       2,
       0.5
     );
-    console.log(canvasRef.current.width, canvasRef.current.height);
 
-    ctx.putImageData(imageData, 0, 0);
+    const worley = getWorleyNoiseImageData(canvasRef.current.width, canvasRef.current.height);
+
+    ctx.putImageData(worley, 0, 0);
   }, []);
 
   // Rerender when parameters change
@@ -74,6 +81,10 @@ function App() {
         setNoiseType(NoiseType.Simplex);
         console.log("set to simplex");
         break;
+      case "worley":
+        setNoiseType(NoiseType.Worley);
+        console.log("set to worley");
+        break;
 
       default:
         throw new Error("Unknow noise type!");
@@ -95,6 +106,7 @@ function App() {
         <option value="value">Value</option>
         <option value="perlin">Perlin</option>
         <option value="simplex">Simplex</option>
+        <option value="worley">Worley</option>
       </select>
       <select name="dimension" id="dimesnion" onChange={(e) => handleDimensionChange(e)}>
         <option value={1}>1D</option>
