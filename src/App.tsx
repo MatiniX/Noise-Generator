@@ -1,13 +1,14 @@
-import { markTimeline } from "console";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import InteractiveInput from "./components/InteractiveInput";
 import {
+  evaluateGradient,
   getImageData,
   getUVImageData,
   getWorleyNoiseImageData,
   NoiseType,
 } from "./Noise/imageGenerator";
-import { Vector2, random2 } from "./Noise/mathUtils";
+import { Vector2, random2, Color } from "./Noise/mathUtils";
+import GradientCreator from "./GradientCreator";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -20,30 +21,10 @@ function App() {
   const [octaves, setOctaves] = useState(1);
   const [lacunarity, setLacunarity] = useState(2.0);
   const [persistance, setPersistance] = useState(0.5);
-
-  // Default setup
-  useEffect(() => {
-    const ctx = canvasRef.current.getContext("2d")!;
-    setCanvasScale(512 / canvasRef.current.width);
-    // set default values
-    ctx.putImageData(new ImageData(canvasRef.current.width, canvasRef.current.height), 0, 0);
-    const imageData = getImageData(
-      canvasRef.current.width,
-      canvasRef.current.height,
-      NoiseType.Value,
-      1,
-      1,
-      0,
-      0,
-      1,
-      2,
-      0.5
-    );
-
-    const worley = getWorleyNoiseImageData(canvasRef.current.width, canvasRef.current.height);
-
-    ctx.putImageData(worley, 0, 0);
-  }, []);
+  const [palette, setPalette] = useState([
+    { offset: "0.00", color: "rgb(0, 0, 0)" },
+    { offset: "1.00", color: "rgb(255, 255, 255)" },
+  ]);
 
   // Rerender when parameters change
   useEffect(() => {
@@ -62,10 +43,19 @@ function App() {
       lacunarity,
       persistance
     );
-    console.log(canvasRef.current.width, canvasRef.current.height);
 
     ctx.putImageData(imageData, 0, 0);
-  }, [noiseType, dimension, frequecny, offsetX, offsetY, octaves, lacunarity, persistance]);
+  }, [
+    noiseType,
+    dimension,
+    frequecny,
+    offsetX,
+    offsetY,
+    octaves,
+    lacunarity,
+    persistance,
+    palette,
+  ]);
 
   const handleNoiseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     switch (e.target.value) {
@@ -92,6 +82,13 @@ function App() {
   };
   const handleDimensionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setDimension(parseInt(e.target.value));
+  };
+  const downloadImage = () => {
+    const img = canvasRef.current.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    const link = document.createElement("a");
+    link.download = "noise-texture.png";
+    link.href = img;
+    link.click();
   };
 
   return (
@@ -168,6 +165,8 @@ function App() {
           onChange={(e) => setPersistance(parseFloat(e.target.value))}
         />
       </div>
+      <button onClick={downloadImage}>Download</button>
+      <GradientCreator palette={palette} setPalette={setPalette} />
     </div>
   );
 }

@@ -52,6 +52,37 @@ class Vector2 {
     return Math.sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
   }
 }
+class Color {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+  constructor(color: string);
+  constructor(r: number, g: number, b: number, a: number);
+  constructor(r: number | string, g?: number, b?: number, a?: number) {
+    if (typeof r === "string") {
+      let values = r.replace("rgb", "").replace("(", "").replace(")", "").split(",");
+
+      this.r = parseInt(values[0]);
+      this.g = parseInt(values[1]);
+      this.b = parseInt(values[2]);
+      this.a = 1;
+    } else {
+      this.r = r;
+      this.g = g!;
+      this.b = b!;
+      this.a = a!;
+    }
+  }
+
+  public static lerp(c1: Color, c2: Color, t: number) {
+    const interpolR = Math.round(lerp(c1.r, c2.r, t));
+    const interpolG = Math.round(lerp(c1.g, c2.g, t));
+    const interpolB = Math.round(lerp(c1.b, c2.b, t));
+
+    return new Color(interpolR, interpolG, interpolB, 1);
+  }
+}
 
 export {
   lerp,
@@ -60,6 +91,7 @@ export {
   random2,
   fract,
   Vector2,
+  Color,
   sqrt2,
   squaresToTriangles,
   trainglesToSquares,
