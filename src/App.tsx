@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import InteractiveInput from "./components/InteractiveInput";
 import {
   evaluateGradient,
@@ -9,6 +9,7 @@ import {
 } from "./Noise/imageGenerator";
 import { Vector2, random2, Color } from "./Noise/mathUtils";
 import GradientCreator from "./GradientCreator";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -93,78 +94,26 @@ function App() {
 
   return (
     <div>
-      <h1>Noise generator</h1>
+      <Sidebar
+        handleNoiseTypeChange={handleNoiseTypeChange}
+        handleDimensionChange={handleDimensionChange}
+        setFrequency={setFrequency}
+        setOffsetX={setOffsetX}
+        setOffsetY={setOffsetY}
+        octaves={octaves}
+        setOctaves={setOctaves}
+        lacunarity={lacunarity}
+        setLacunarity={setLacunarity}
+        persistance={persistance}
+        setPersistance={setPersistance}
+      />
+      <br />
       <div className="canvas-container">
         <canvas ref={canvasRef} width="512" height="512"></canvas>
       </div>
 
       <br />
-      <select name="noiseType" id="noiseType" onChange={(e) => handleNoiseTypeChange(e)}>
-        <option value="value">Value</option>
-        <option value="perlin">Perlin</option>
-        <option value="simplex">Simplex</option>
-        <option value="worley">Worley</option>
-      </select>
-      <select name="dimension" id="dimesnion" onChange={(e) => handleDimensionChange(e)}>
-        <option value={1}>1D</option>
-        <option value={2}>2D</option>
-      </select>
-      <div>
-        <InteractiveInput
-          label="Frequency"
-          id="frequency"
-          defaultValue={4}
-          setParameter={setFrequency}
-        />
-      </div>
-      <div>
-        <InteractiveInput
-          label="Offset X"
-          id="ofssetX"
-          defaultValue={0}
-          setParameter={setOffsetX}
-        />
-        {dimension > 1 && (
-          <InteractiveInput
-            label="Offset Y"
-            id="offsetY"
-            defaultValue={0}
-            setParameter={setOffsetY}
-          />
-        )}
-      </div>
-      <div>
-        <label htmlFor="octaves">Octaves</label>
-        <input
-          type="range"
-          min={1}
-          max={8}
-          value={octaves}
-          onChange={(e) => setOctaves(parseInt(e.target.value))}
-        />
-      </div>
-      <div>
-        <label htmlFor="lacunarity">Lacunarity</label>
-        <input
-          type="range"
-          min={1.0}
-          max={4.0}
-          step="0.01"
-          value={lacunarity}
-          onChange={(e) => setLacunarity(parseFloat(e.target.value))}
-        />
-      </div>
-      <div>
-        <label htmlFor="persistance">Persistance</label>
-        <input
-          type="range"
-          min={0.0}
-          max={1.0}
-          step="0.001"
-          value={persistance}
-          onChange={(e) => setPersistance(parseFloat(e.target.value))}
-        />
-      </div>
+
       <button onClick={downloadImage}>Download</button>
       <GradientCreator palette={palette} setPalette={setPalette} />
     </div>

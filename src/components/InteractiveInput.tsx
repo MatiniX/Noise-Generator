@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
-interface Props {
+type Props = {
   label: string;
   id: string;
   defaultValue: number;
   setParameter: (n: number) => void;
-}
+};
 
 const InteractiveInput = ({ label, id, defaultValue, setParameter }: Props) => {
   const [value, setValue] = useState(defaultValue);
