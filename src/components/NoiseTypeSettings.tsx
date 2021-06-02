@@ -1,19 +1,35 @@
 import { useRef } from "react";
 import { FiSettings } from "react-icons/fi";
+import Select from "react-select";
+
+// TODO: Somehow style select elements
 
 type Props = {
   collapse: (content: HTMLDivElement) => void;
   handleNoiseTypeChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleDimensionChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  openSidebar: (open: boolean) => void;
 };
 
-const NoiseTypeSettings = ({ collapse, handleNoiseTypeChange, handleDimensionChange }: Props) => {
+const NoiseTypeSettings = ({
+  collapse,
+  handleNoiseTypeChange,
+  handleDimensionChange,
+  openSidebar,
+}: Props) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   return (
     <li className="nav-item">
-      <a href="#" className="nav-link" onClick={() => collapse(contentRef.current!)}>
-        <FiSettings />
+      <a
+        href="#"
+        className="nav-link"
+        onClick={() => {
+          collapse(contentRef.current!);
+          openSidebar(true);
+        }}
+      >
+        <FiSettings className="nav-link-icon" />
         <span className="link-text">Noise Type</span>
       </a>
       <div ref={contentRef} className={`settings-panel`}>

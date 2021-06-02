@@ -10,6 +10,7 @@ import {
 import { Vector2, random2, Color } from "./Noise/mathUtils";
 import GradientCreator from "./GradientCreator";
 import Sidebar from "./components/Sidebar";
+import Select from "react-select";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -106,6 +107,8 @@ function App() {
         setLacunarity={setLacunarity}
         persistance={persistance}
         setPersistance={setPersistance}
+        palette={palette}
+        setPalette={setPalette}
       />
       <br />
       <div className="canvas-container">

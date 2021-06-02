@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { ChromePicker } from "react-color";
-import { GradientPicker } from "react-linear-gradient-picker";
+import { GradientPickerPopover } from "react-linear-gradient-picker";
 
 type Props = {
   palette: { offset: string; color: string }[];
@@ -32,9 +33,14 @@ const WrappedColorPicker = ({ onSelect, ...rest }: any) => (
 );
 
 const GradientCreator = ({ palette, setPalette }: Props) => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <GradientPicker
+    <GradientPickerPopover
       {...{
+        open,
+        setOpen,
+        showAnglePicker: false,
         width: 320,
         paletteHeight: 32,
         palette,
@@ -42,7 +48,7 @@ const GradientCreator = ({ palette, setPalette }: Props) => {
       }}
     >
       <WrappedColorPicker />
-    </GradientPicker>
+    </GradientPickerPopover>
   );
 };
 

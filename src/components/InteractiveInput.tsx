@@ -16,8 +16,7 @@ const InteractiveInput = ({ label, id, defaultValue, setParameter }: Props) => {
   let dragStartX: number;
   let prevDeltaX: number;
 
-  const dragStart = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-    // console.log("mouse drag start");
+  const dragStart = (e: React.MouseEvent<HTMLLabelElement, MouseEvent>) => {
     document.addEventListener("mousemove", dragMove);
     document.addEventListener("mouseup", dragStop);
 
@@ -25,13 +24,12 @@ const InteractiveInput = ({ label, id, defaultValue, setParameter }: Props) => {
     prevDeltaX = dragStartX;
   };
   const dragStop = () => {
-    // console.log("dragStop");
     document.removeEventListener("mousemove", dragMove);
     document.removeEventListener("mouseup", dragStop);
   };
   const dragMove = (e: MouseEvent) => {
     const deltaX = e.screenX - prevDeltaX;
-    // console.log(deltaX);
+
     setValue((prevValue) => {
       return prevValue + deltaX * 0.01;
     });
@@ -39,18 +37,20 @@ const InteractiveInput = ({ label, id, defaultValue, setParameter }: Props) => {
   };
 
   return (
-    <>
-      <label htmlFor={id}>{label}</label>
+    <div className="input-container">
+      <label htmlFor={id} className="interactive-input-label" onMouseDown={dragStart}>
+        {label}:
+      </label>
       <input
         id={id}
         type="number"
-        onMouseDown={dragStart}
-        value={value}
+        value={Math.round((value + Number.EPSILON) * 100) / 100}
         onChange={(e) => {
           setValue(parseFloat(e.target.value));
         }}
+        className="interactive-input-field"
       />
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,8 @@
-import { useRef } from "react";
-import { FiSettings } from "react-icons/fi";
+import { useRef, useState } from "react";
+import { BsGraphDown } from "react-icons/bs";
+import { RiArrowDropDownFill } from "react-icons/ri";
+
+// TODO: Make settings components more reusable
 
 type Props = {
   collapse: (content: HTMLDivElement) => void;
@@ -9,6 +12,7 @@ type Props = {
   setLacunarity: (n: number) => void;
   persistance: number;
   setPersistance: (n: number) => void;
+  openSidebar: (open: boolean) => void;
 };
 
 const FractalSettings = ({
@@ -19,28 +23,44 @@ const FractalSettings = ({
   setLacunarity,
   persistance,
   setPersistance,
+  openSidebar,
 }: Props) => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
 
   return (
     <li className="nav-item">
-      <a href="#" className="nav-link" onClick={() => collapse(contentRef.current!)}>
-        <FiSettings />
+      <a
+        href="#"
+        className="nav-link"
+        onClick={() => {
+          collapse(contentRef.current!);
+          setOpen(!open);
+          openSidebar(true);
+        }}
+      >
+        <BsGraphDown className="nav-link-icon" />
         <span className="link-text">Fractal Settings</span>
+        <RiArrowDropDownFill className={`link-dropdown ${open && "open"}`} />
       </a>
       <div ref={contentRef} className={`settings-panel`}>
-        <div>
-          <label htmlFor="octaves">Octaves</label>
+        <div className="input-container">
+          <label htmlFor="octaves" className="slider-label">
+            Octaves: {octaves}
+          </label>
           <input
             type="range"
             min={1}
             max={8}
             value={octaves}
             onChange={(e) => setOctaves(parseInt(e.target.value))}
+            className="slider"
           />
         </div>
-        <div>
-          <label htmlFor="lacunarity">Lacunarity</label>
+        <div className="input-container">
+          <label htmlFor="lacunarity" className="slider-label">
+            Lacunarity: {lacunarity}
+          </label>
           <input
             type="range"
             min={1.0}
@@ -48,10 +68,13 @@ const FractalSettings = ({
             step="0.01"
             value={lacunarity}
             onChange={(e) => setLacunarity(parseFloat(e.target.value))}
+            className="slider"
           />
         </div>
-        <div>
-          <label htmlFor="persistance">Persistance</label>
+        <div className="input-container">
+          <label htmlFor="persistance" className="slider-label">
+            Persistance: {persistance}
+          </label>
           <input
             type="range"
             min={0.0}
@@ -59,8 +82,10 @@ const FractalSettings = ({
             step="0.001"
             value={persistance}
             onChange={(e) => setPersistance(parseFloat(e.target.value))}
+            className="slider"
           />
         </div>
+        <div className="underline"></div>
       </div>
     </li>
   );
