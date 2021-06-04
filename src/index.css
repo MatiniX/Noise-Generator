@@ -6,8 +6,17 @@
   --bg-secondary: #141418;
   --icon-active: #2dcdfd;
   --bg-input: #313645;
+  --scrollbar-thumb: #332a3b;
+  --scrollbar-track: #2a333b;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* TODO: Style cnavas properly */
 body {
   margin: 0;
   padding: 0;
@@ -44,7 +53,33 @@ label {
   height: 512px;
 }
 
-/* Sidebar */
+/* Scrollbar */
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+/* -------- */
+
+/* SIDEBAR */
+
+/* Navigation */
 .navbar {
   width: 5rem;
   height: 100vh;
@@ -57,6 +92,10 @@ label {
   overflow-y: auto;
 }
 
+.navbar-open {
+  width: 18rem;
+}
+
 .navbar-nav {
   list-style: none;
   padding: 0;
@@ -66,15 +105,21 @@ label {
   align-items: center;
   height: 100%;
 }
+
 .nav-item {
   width: 100%;
 }
+
 .nav-item svg {
   font-size: 2rem;
 }
+
 .nav-item:last-child {
   margin-top: auto;
 }
+/* --- */
+
+/* Navigation links */
 
 .nav-link {
   display: flex;
@@ -84,40 +129,52 @@ label {
   text-decoration: none;
   filter: grayscale(100%) opacity(0.7);
   transition: all 600ms ease;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
 }
 .nav-link:hover {
   filter: grayscale(0%) opacity(1);
   background-color: var(--bg-secondary);
   color: var(--text-primary);
 }
+
 .link-text {
   display: none;
   margin-left: 1rem;
   white-space: nowrap;
   overflow: hidden;
 }
+
 .link-dropdown {
-  display: none;
   transition: transform 300ms ease;
 }
+
 .nav-link-icon {
   min-width: 2rem;
   margin: 0 1.5rem;
   color: var(--icon-active);
 }
-.navbar-open {
-  width: 18rem;
-}
-.navbar-open .link-text {
-  display: block;
-}
+
 .navbar-open .link-dropdown {
   display: block;
   margin-left: auto;
 }
+
 .navbar-open .link-dropdown.open {
   transform: rotate(90deg);
 }
+/* --- */
+
+.navbar-open .link-text {
+  display: block;
+}
+
+/* Logo */
+
 .logo {
   font-weight: bold;
   text-transform: uppercase;
@@ -126,23 +183,19 @@ label {
   color: var(--text-secondary);
   background: var(--bg-secondary);
   width: 100%;
+  cursor: pointer;
 }
 
 .logo svg {
   transform: rotate(0deg);
   transition: transform 600ms ease;
+  min-height: 2rem;
+  margin-left: auto;
 }
 .navbar-open .logo svg {
   transform: rotate(-180deg);
 }
-
-.settings-panel {
-  padding: 0 18px;
-  overflow: hidden;
-  max-height: 0;
-  transition: all 1s ease;
-  transition: max-height 0.3s ease-out;
-}
+/* --- */
 
 /* Interactive input */
 
@@ -173,6 +226,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+/* --- */
 
 /* Sliders */
 
@@ -199,8 +253,76 @@ input::-webkit-inner-spin-button {
   background: var(--icon-active);
   box-shadow: -80px 0 0 80px var(--icon-active);
 }
+/* --- */
 
-.slider-label {
+/* Select */
+select {
+  /*  A reset of styles, including removing the default dropdown arrow */
+  appearance: none;
+  /*  Additional resets for further consistency */
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  outline: none;
+  color: var(--text-secondary);
+}
+
+select option {
+  color: black;
+}
+
+.select {
+  border-radius: 5px;
+  padding: 0.25em 0.25em;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: var(--bg-input);
+  display: grid;
+  grid-template-areas: "select";
+  align-items: center;
+  position: relative;
+}
+
+.select::after {
+  content: "";
+  width: 0.5em;
+  height: 0.3em;
+  background-color: var(--text-secondary);
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  justify-self: end;
+}
+
+select,
+.select:after {
+  grid-area: select;
+}
+
+select:focus + .focus {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border: 2px solid var(--icon-active);
+  border-radius: inherit;
+}
+/* --- */
+
+/* Download button */
+
+.download-text {
+  font-weight: bold;
+}
+
+/* Global styles */
+.label {
   color: var(--text-primary);
 }
 
@@ -208,4 +330,17 @@ input::-webkit-inner-spin-button {
   height: 2px;
   width: 100%;
   background: linear-gradient(to left, transparent 10%, #313645 50%, transparent 90%);
+}
+
+/* Utility classes */
+.p-1 {
+  padding: 1rem;
+}
+
+.my-collapse {
+  overflow: hidden;
+  transition: height 0.2s ease-in-out;
+}
+
+.popover {
 }

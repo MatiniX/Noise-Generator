@@ -1,5 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import InteractiveInput from "./components/InteractiveInput";
+import { useEffect, useRef, useState } from "react";
 import {
   evaluateGradient,
   getImageData,
@@ -10,23 +9,24 @@ import {
 import { Vector2, random2, Color } from "./Noise/mathUtils";
 import GradientCreator from "./GradientCreator";
 import Sidebar from "./components/Sidebar";
-import Select from "react-select";
+import { useGlobalContext } from "./context";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
   const [canvasScale, setCanvasScale] = useState(1);
-  const [noiseType, setNoiseType] = useState(NoiseType.Value);
-  const [dimension, setDimension] = useState(1);
-  const [frequecny, setFrequency] = useState(4);
-  const [offsetX, setOffsetX] = useState(0);
-  const [offsetY, setOffsetY] = useState(0);
-  const [octaves, setOctaves] = useState(1);
-  const [lacunarity, setLacunarity] = useState(2.0);
-  const [persistance, setPersistance] = useState(0.5);
-  const [palette, setPalette] = useState([
-    { offset: "0.00", color: "rgb(0, 0, 0)" },
-    { offset: "1.00", color: "rgb(255, 255, 255)" },
-  ]);
+
+  // Get values from context
+  const {
+    noiseType,
+    dimension,
+    frequency,
+    offsetX,
+    offsetY,
+    octaves,
+    lacunarity,
+    persistance,
+    palette,
+  } = useGlobalContext();
 
   // Rerender when parameters change
   useEffect(() => {
@@ -38,7 +38,7 @@ function App() {
       canvasRef.current.height,
       noiseType,
       dimension,
-      frequecny,
+      frequency,
       offsetX,
       offsetY,
       octaves,
@@ -50,7 +50,7 @@ function App() {
   }, [
     noiseType,
     dimension,
-    frequecny,
+    frequency,
     offsetX,
     offsetY,
     octaves,
@@ -59,32 +59,7 @@ function App() {
     palette,
   ]);
 
-  const handleNoiseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    switch (e.target.value) {
-      case "value":
-        setNoiseType(NoiseType.Value);
-        console.log("set to value");
-        break;
-      case "perlin":
-        setNoiseType(NoiseType.Perlin);
-        console.log("set to perlin");
-        break;
-      case "simplex":
-        setNoiseType(NoiseType.Simplex);
-        console.log("set to simplex");
-        break;
-      case "worley":
-        setNoiseType(NoiseType.Worley);
-        console.log("set to worley");
-        break;
-
-      default:
-        throw new Error("Unknow noise type!");
-    }
-  };
-  const handleDimensionChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setDimension(parseInt(e.target.value));
-  };
+  // downloads current noise texture as .png
   const downloadImage = () => {
     const img = canvasRef.current.toDataURL("image/png").replace("image/png", "image/octet-stream");
     const link = document.createElement("a");
@@ -95,30 +70,17 @@ function App() {
 
   return (
     <div>
-      <Sidebar
-        handleNoiseTypeChange={handleNoiseTypeChange}
-        handleDimensionChange={handleDimensionChange}
-        setFrequency={setFrequency}
-        setOffsetX={setOffsetX}
-        setOffsetY={setOffsetY}
-        octaves={octaves}
-        setOctaves={setOctaves}
-        lacunarity={lacunarity}
-        setLacunarity={setLacunarity}
-        persistance={persistance}
-        setPersistance={setPersistance}
-        palette={palette}
-        setPalette={setPalette}
-      />
+      <Sidebar downloadImage={downloadImage} />
+
       <br />
+      {/* TODO: Make canvas component */}
       <div className="canvas-container">
         <canvas ref={canvasRef} width="512" height="512"></canvas>
       </div>
 
       <br />
 
-      <button onClick={downloadImage}>Download</button>
-      <GradientCreator palette={palette} setPalette={setPalette} />
+      <GradientCreator />
     </div>
   );
 }

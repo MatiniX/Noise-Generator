@@ -11,7 +11,7 @@ const InteractiveInput = ({ label, id, defaultValue, setParameter }: Props) => {
   const [value, setValue] = useState(defaultValue);
   useEffect(() => {
     setParameter(value);
-  }, [value]);
+  }, [value, setParameter]);
 
   let dragStartX: number;
   let prevDeltaX: number;

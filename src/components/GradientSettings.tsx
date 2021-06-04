@@ -1,42 +1,41 @@
-import { useRef, useState } from "react";
-import { FiSettings } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { MdGradient } from "react-icons/md";
+import { RiArrowDropDownFill } from "react-icons/ri";
 import GradientCreator from "../GradientCreator";
+import Collapsible from "./Collapsible";
 
 // TODO: style this somehow and make gradient picker appear at reasonable position
 
 type Props = {
-  collapse: (content: HTMLDivElement) => void;
-  palette: { offset: string; color: string }[];
-  setPalette: React.Dispatch<
-    React.SetStateAction<
-      {
-        offset: string;
-        color: string;
-      }[]
-    >
-  >;
+  isSidebarOpen: boolean;
   openSidebar: (open: boolean) => void;
 };
 
-const GradientSettings = ({ collapse, palette, setPalette, openSidebar }: Props) => {
-  const contentRef = useRef<HTMLDivElement>(null);
+const GradientSettings = ({ isSidebarOpen, openSidebar }: Props) => {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (open && !isSidebarOpen) {
+      setOpen(false);
+    }
+  }, [isSidebarOpen, open]);
 
   return (
     <li className="nav-item">
-      <a
-        href="#"
+      <button
         className="nav-link"
         onClick={() => {
-          collapse(contentRef.current!);
+          setOpen(!open);
           openSidebar(true);
         }}
       >
-        <FiSettings className="nav-link-icon" />
+        <MdGradient className="nav-link-icon" />
         <span className="link-text">Gradient Settings</span>
-      </a>
-      <div ref={contentRef} className={`settings-panel`}>
-        <GradientCreator palette={palette} setPalette={setPalette} />
-      </div>
+        <RiArrowDropDownFill className={`link-dropdown ${open && "open"}`} />
+      </button>
+      <Collapsible open={open} setOpen={setOpen}>
+        <GradientCreator />
+      </Collapsible>
     </li>
   );
 };

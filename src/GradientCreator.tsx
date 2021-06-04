@@ -1,18 +1,7 @@
 import { useState } from "react";
 import { ChromePicker } from "react-color";
 import { GradientPickerPopover } from "react-linear-gradient-picker";
-
-type Props = {
-  palette: { offset: string; color: string }[];
-  setPalette: React.Dispatch<
-    React.SetStateAction<
-      {
-        offset: string;
-        color: string;
-      }[]
-    >
-  >;
-};
+import { useGlobalContext } from "./context";
 
 // refactor this part so it si more typescript commpilant
 
@@ -32,8 +21,9 @@ const WrappedColorPicker = ({ onSelect, ...rest }: any) => (
   />
 );
 
-const GradientCreator = ({ palette, setPalette }: Props) => {
+const GradientCreator = () => {
   const [open, setOpen] = useState(false);
+  const { palette, setPalette } = useGlobalContext();
 
   return (
     <GradientPickerPopover

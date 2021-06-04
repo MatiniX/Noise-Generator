@@ -3,7 +3,6 @@ import {
   smooth,
   Vector2,
   dot,
-  sqrt2,
   trainglesToSquares,
   squaresToTriangles,
   random2,
@@ -171,7 +170,7 @@ class Noise {
     let tx = smooth(tx0);
     let ty = smooth(ty0);
 
-    return lerp(lerp(v00, v10, tx), lerp(v01, v11, tx), ty) * sqrt2;
+    return lerp(lerp(v00, v10, tx), lerp(v01, v11, tx), ty) * Math.SQRT2;
   }
 
   /** SIMPLEX NOISE */

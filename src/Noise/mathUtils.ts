@@ -1,4 +1,3 @@
-const sqrt2 = Math.sqrt(2);
 const squaresToTriangles = (3 - Math.sqrt(3)) / 6;
 const trainglesToSquares = (Math.sqrt(3) - 1) / 2;
 
@@ -92,7 +91,6 @@ export {
   fract,
   Vector2,
   Color,
-  sqrt2,
   squaresToTriangles,
   trainglesToSquares,
 };

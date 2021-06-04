@@ -1,33 +1,30 @@
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { RiRuler2Fill, RiArrowDropDownFill } from "react-icons/ri";
+import { useGlobalContext } from "../context";
+import Collapsible from "./Collapsible";
 import InteractiveInput from "./InteractiveInput";
 
 type Props = {
-  collapse: (content: HTMLDivElement) => void;
-  setFrequency: (n: number) => void;
-  setOffsetX: (n: number) => void;
-  setOffsetY: (n: number) => void;
   openSidebar: (open: boolean) => void;
+  isSidebarOpen: boolean;
 };
 
-const OffsetAndScaleSettings = ({
-  collapse,
-  setFrequency,
-  setOffsetX,
-  setOffsetY,
-  openSidebar,
-}: Props) => {
+const OffsetAndScaleSettings = ({ openSidebar, isSidebarOpen }: Props) => {
   const dimension = 2;
-  const contentRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const { setFrequency, setOffsetX, setOffsetY } = useGlobalContext();
+
+  useEffect(() => {
+    if (open && !isSidebarOpen) {
+      setOpen(false);
+    }
+  }, [isSidebarOpen, open]);
 
   return (
     <li className="nav-item">
-      <a
-        href="#"
+      <button
         className="nav-link"
         onClick={() => {
-          collapse(contentRef.current!);
           setOpen(!open);
           openSidebar(true);
         }}
@@ -35,9 +32,9 @@ const OffsetAndScaleSettings = ({
         <RiRuler2Fill className="nav-link-icon" />
         <span className="link-text">Offset and Scale</span>
         <RiArrowDropDownFill className={`link-dropdown ${open && "open"}`} />
-      </a>
+      </button>
 
-      <div ref={contentRef} className={`settings-panel`}>
+      <Collapsible open={open} setOpen={setOpen}>
         <InteractiveInput
           label="Frequency"
           id="frequency"
@@ -60,7 +57,7 @@ const OffsetAndScaleSettings = ({
           />
         )}
         <div className="underline"></div>
-      </div>
+      </Collapsible>
     </li>
   );
 };

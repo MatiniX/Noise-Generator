@@ -1,40 +1,34 @@
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { BsGraphDown } from "react-icons/bs";
 import { RiArrowDropDownFill } from "react-icons/ri";
+import { useGlobalContext } from "../context";
+import Collapsible from "./Collapsible";
 
 // TODO: Make settings components more reusable
 
 type Props = {
-  collapse: (content: HTMLDivElement) => void;
-  octaves: number;
-  setOctaves: (n: number) => void;
-  lacunarity: number;
-  setLacunarity: (n: number) => void;
-  persistance: number;
-  setPersistance: (n: number) => void;
   openSidebar: (open: boolean) => void;
+  isSidebarOpen: boolean;
 };
 
-const FractalSettings = ({
-  collapse,
-  octaves,
-  setOctaves,
-  lacunarity,
-  setLacunarity,
-  persistance,
-  setPersistance,
-  openSidebar,
-}: Props) => {
-  const contentRef = useRef<HTMLDivElement>(null);
+const FractalSettings = ({ openSidebar, isSidebarOpen }: Props) => {
   const [open, setOpen] = useState(false);
+
+  const { octaves, setOctaves, lacunarity, setLacunarity, persistance, setPersistance } =
+    useGlobalContext();
+
+  // collapse dropdown when sidebar closes
+  useEffect(() => {
+    if (open && !isSidebarOpen) {
+      setOpen(false);
+    }
+  }, [isSidebarOpen, open]);
 
   return (
     <li className="nav-item">
-      <a
-        href="#"
+      <button
         className="nav-link"
         onClick={() => {
-          collapse(contentRef.current!);
           setOpen(!open);
           openSidebar(true);
         }}
@@ -42,10 +36,10 @@ const FractalSettings = ({
         <BsGraphDown className="nav-link-icon" />
         <span className="link-text">Fractal Settings</span>
         <RiArrowDropDownFill className={`link-dropdown ${open && "open"}`} />
-      </a>
-      <div ref={contentRef} className={`settings-panel`}>
+      </button>
+      <Collapsible open={open} setOpen={setOpen}>
         <div className="input-container">
-          <label htmlFor="octaves" className="slider-label">
+          <label htmlFor="octaves" className="label">
             Octaves: {octaves}
           </label>
           <input
@@ -58,7 +52,7 @@ const FractalSettings = ({
           />
         </div>
         <div className="input-container">
-          <label htmlFor="lacunarity" className="slider-label">
+          <label htmlFor="lacunarity" className="label">
             Lacunarity: {lacunarity}
           </label>
           <input
@@ -72,7 +66,7 @@ const FractalSettings = ({
           />
         </div>
         <div className="input-container">
-          <label htmlFor="persistance" className="slider-label">
+          <label htmlFor="persistance" className="label">
             Persistance: {persistance}
           </label>
           <input
@@ -86,7 +80,7 @@ const FractalSettings = ({
           />
         </div>
         <div className="underline"></div>
-      </div>
+      </Collapsible>
     </li>
   );
 };
