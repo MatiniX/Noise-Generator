@@ -18,6 +18,18 @@ const Collapsible: React.FC<Props> = ({ open, children, setOpen }) => {
     }
   }, [open]);
 
+  // resize the collapsible when its height changes
+  useEffect(() => {
+    if (!height || !open || !ref.current) return undefined;
+    const resizeObserver = new ResizeObserver((el) => {
+      setHeight(el[0].contentRect.height);
+    });
+    resizeObserver.observe(ref.current);
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [height, open]);
+
   return (
     <>
       <div className="my-collapse" style={{ height }}>

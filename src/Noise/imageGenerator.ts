@@ -1,4 +1,4 @@
-import { Color, smooth, Vector2 } from "./mathUtils";
+import { Color, Vector2 } from "./mathUtils";
 import { Noise } from "./noise";
 
 enum NoiseType {
@@ -10,8 +10,7 @@ enum NoiseType {
 
 // function that returns noise texture based on passed parameters
 const getImageData = (
-  width: number,
-  height: number,
+  resolution: number,
   noiseType: NoiseType,
   dimension: number,
   frequency: number,
@@ -22,8 +21,8 @@ const getImageData = (
   persistance: number,
   gradient?: { offset: string; color: string }[]
 ) => {
-  const imageData = new ImageData(width, height);
-  const stepSize = 1 / width;
+  const imageData = new ImageData(resolution, resolution);
+  const stepSize = 1 / resolution;
 
   for (let y = 0; y < imageData.height; y++) {
     for (let x = 0; x < imageData.width; x++) {
@@ -42,6 +41,7 @@ const getImageData = (
         c = evaluateGradient(gradient, val);
       }
 
+      // TODO: This should be multithreaded (ideally)
       const idx = ((imageData.height - y - 1) * imageData.width + x) * 4; // calculate pixel index so that positive y is up
       // set color data for single pixel (rgba)
       // adding offset of 0.5 because so te pixel origin lies in midlle of top left corner
@@ -53,9 +53,9 @@ const getImageData = (
   }
   return imageData;
 };
-const getUVImageData = (width: number, height: number) => {
-  const imageData = new ImageData(width, height);
-  const stepSize = 1 / width;
+const getUVImageData = (resolution: number, height: number) => {
+  const imageData = new ImageData(resolution, height);
+  const stepSize = 1 / resolution;
 
   for (let y = 0; y < imageData.height; y++) {
     for (let x = 0; x < imageData.width; x++) {
@@ -72,9 +72,9 @@ const getUVImageData = (width: number, height: number) => {
   }
   return imageData;
 };
-const getWorleyNoiseImageData = (width: number, height: number) => {
-  const imageData = new ImageData(width, height);
-  const stepSize = 1 / width;
+const getWorleyNoiseImageData = (resolution: number, height: number) => {
+  const imageData = new ImageData(resolution, height);
+  const stepSize = 1 / resolution;
 
   for (let y = 0; y < imageData.height; y++) {
     for (let x = 0; x < imageData.width; x++) {

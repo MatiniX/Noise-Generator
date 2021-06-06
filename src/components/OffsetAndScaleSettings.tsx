@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RiRuler2Fill, RiArrowDropDownFill } from "react-icons/ri";
 import { useGlobalContext } from "../context";
 import Collapsible from "./Collapsible";
@@ -10,9 +10,9 @@ type Props = {
 };
 
 const OffsetAndScaleSettings = ({ openSidebar, isSidebarOpen }: Props) => {
-  const dimension = 2;
   const [open, setOpen] = useState(false);
-  const { setFrequency, setOffsetX, setOffsetY } = useGlobalContext();
+  const { setFrequency, setOffsetX, setOffsetY, dimension, resolution, setResolution } =
+    useGlobalContext();
 
   useEffect(() => {
     if (open && !isSidebarOpen) {
@@ -20,6 +20,10 @@ const OffsetAndScaleSettings = ({ openSidebar, isSidebarOpen }: Props) => {
     }
   }, [isSidebarOpen, open]);
 
+  const handleResolutionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newRes = Number(e.target.value);
+    setResolution(newRes);
+  };
   return (
     <li className="nav-item">
       <button
@@ -56,6 +60,29 @@ const OffsetAndScaleSettings = ({ openSidebar, isSidebarOpen }: Props) => {
             setParameter={setOffsetY}
           />
         )}
+        <div className="input-container">
+          <label htmlFor="noiseType" className="label">
+            Resolution (px):
+          </label>
+          <div className="select">
+            <select
+              name="resolution"
+              id="resolution"
+              onChange={(e) => handleResolutionChange(e)}
+              value={resolution}
+            >
+              <option value="16">16</option>
+              <option value="32">32</option>
+              <option value="64">64</option>
+              <option value="128">128</option>
+              <option value="256">256</option>
+              <option value="512">512</option>
+              <option value="1024">1024</option>
+              <option value="2048">2048</option>
+            </select>
+            <span className="focus"></span>
+          </div>
+        </div>
         <div className="underline"></div>
       </Collapsible>
     </li>

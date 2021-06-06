@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { MdGradient } from "react-icons/md";
 import { RiArrowDropDownFill } from "react-icons/ri";
-import GradientCreator from "../GradientCreator";
+import { useGlobalContext } from "../context";
 import Collapsible from "./Collapsible";
-
-// TODO: style this somehow and make gradient picker appear at reasonable position
 
 type Props = {
   isSidebarOpen: boolean;
@@ -13,6 +11,7 @@ type Props = {
 
 const GradientSettings = ({ isSidebarOpen, openSidebar }: Props) => {
   const [open, setOpen] = useState(false);
+  const { useGradient, setUseGradient } = useGlobalContext();
 
   useEffect(() => {
     if (open && !isSidebarOpen) {
@@ -34,7 +33,17 @@ const GradientSettings = ({ isSidebarOpen, openSidebar }: Props) => {
         <RiArrowDropDownFill className={`link-dropdown ${open && "open"}`} />
       </button>
       <Collapsible open={open} setOpen={setOpen}>
-        <GradientCreator />
+        <div className="input-container">
+          <label htmlFor="useGradient" className="label">
+            Use Gradient:
+          </label>
+          <input
+            type="checkbox"
+            checked={useGradient}
+            onChange={() => setUseGradient(!useGradient)}
+          />
+        </div>
+        <div className="underline"></div>
       </Collapsible>
     </li>
   );

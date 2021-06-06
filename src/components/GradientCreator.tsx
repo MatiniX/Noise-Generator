@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChromePicker } from "react-color";
 import { GradientPickerPopover } from "react-linear-gradient-picker";
-import { useGlobalContext } from "./context";
+import { useGlobalContext } from "../context";
 
 // refactor this part so it si more typescript commpilant
 

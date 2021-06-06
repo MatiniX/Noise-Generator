@@ -20,6 +20,10 @@ interface AppContextInterface {
   setPersistance: (n: number) => void;
   palette: { offset: string; color: string }[];
   setPalette: (pallete: { offset: string; color: string }[]) => void;
+  resolution: number;
+  setResolution: (n: number) => void;
+  useGradient: boolean;
+  setUseGradient: (use: boolean) => void;
 }
 
 const AppContext = React.createContext<AppContextInterface>(undefined!);
@@ -33,6 +37,8 @@ const AppProvider = ({ children }: any) => {
   const [octaves, setOctaves] = useState(1);
   const [lacunarity, setLacunarity] = useState(2.0);
   const [persistance, setPersistance] = useState(0.5);
+  const [resolution, setResolution] = useState(512);
+  const [useGradient, setUseGradient] = useState(false);
   const [palette, setPalette] = useState([
     { offset: "0.00", color: "rgb(0, 0, 0)" },
     { offset: "1.00", color: "rgb(255, 255, 255)" },
@@ -59,6 +65,10 @@ const AppProvider = ({ children }: any) => {
         setPersistance,
         palette,
         setPalette,
+        resolution,
+        setResolution,
+        useGradient,
+        setUseGradient,
       }}
     >
       {children}

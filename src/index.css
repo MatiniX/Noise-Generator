@@ -342,5 +342,20 @@ select:focus + .focus {
   transition: height 0.2s ease-in-out;
 }
 
-.popover {
+/* Gradient Picker */
+.gpw {
+  text-align: center;
 }
+
+.trigger {
+  width: 25%;
+}
+
+.trigger .inner {
+  width: 100% !important;
+}
+
+.gpw .popover {
+  left: calc(50% - 172px);
+}
+/* --- */

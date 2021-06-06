@@ -15,6 +15,7 @@ class Noise {
   private static valueFunctions = [Noise.value1d, Noise.value2d];
   private static perlinFunctions = [Noise.perlin1d, Noise.perlin2d];
   private static simplexFunctions = [Noise.simplexValue1d, Noise.simplexValue2d];
+  // TODO: Should be a better method of getting the noise type
   public static noiseFunctions = [
     Noise.valueFunctions,
     Noise.perlinFunctions,
