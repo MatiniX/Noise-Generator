@@ -31,7 +31,7 @@ const GradientCreator = () => {
         open,
         setOpen,
         showAnglePicker: false,
-        width: 320,
+        width: 220,
         paletteHeight: 32,
         palette,
         onPaletteChange: setPalette,

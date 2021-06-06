@@ -1,13 +1,10 @@
 import { useRef } from "react";
-import GradientCreator from "./components/GradientCreator";
 import Sidebar from "./components/Sidebar";
 import ImageCanvas from "./components/ImageCanvas";
 import { useGlobalContext } from "./context";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
-
-  const { useGradient } = useGlobalContext();
 
   // downloads current noise texture as .png
   const downloadImage = () => {
@@ -27,7 +24,6 @@ function App() {
       <ImageCanvas canvasRef={canvasRef} />
 
       <br />
-      {useGradient && <GradientCreator />}
     </div>
   );
 }

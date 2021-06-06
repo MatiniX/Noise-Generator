@@ -29,7 +29,6 @@ const Sidebar = ({ downloadImage }: Props) => {
 
         <GradientSettings openSidebar={setIsOpen} isSidebarOpen={isOpen} />
 
-        {/* TODO: Style download button */}
         <li className="nav-item">
           <button className="nav-link" onClick={downloadImage}>
             <FiDownload className="nav-link-icon" />

@@ -337,15 +337,16 @@ select:focus + .focus {
   padding: 1rem;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .my-collapse {
   overflow: hidden;
   transition: height 0.2s ease-in-out;
 }
 
 /* Gradient Picker */
-.gpw {
-  text-align: center;
-}
 
 .trigger {
   width: 25%;
@@ -356,6 +357,6 @@ select:focus + .focus {
 }
 
 .gpw .popover {
-  left: calc(50% - 172px);
+  left: 1rem;
 }
 /* --- */

@@ -3,6 +3,7 @@ import { MdGradient } from "react-icons/md";
 import { RiArrowDropDownFill } from "react-icons/ri";
 import { useGlobalContext } from "../context";
 import Collapsible from "./Collapsible";
+import GradientCreator from "./GradientCreator";
 
 type Props = {
   isSidebarOpen: boolean;
@@ -43,6 +44,12 @@ const GradientSettings = ({ isSidebarOpen, openSidebar }: Props) => {
             onChange={() => setUseGradient(!useGradient)}
           />
         </div>
+        {useGradient && (
+          <div className="text-center">
+            <GradientCreator />
+          </div>
+        )}
+
         <div className="underline"></div>
       </Collapsible>
     </li>
