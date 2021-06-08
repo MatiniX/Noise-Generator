@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FiDownload } from "react-icons/fi";
 import { HiChevronDoubleRight } from "react-icons/hi";
 import NoiseTypeSettings from "./NoiseTypeSettings";
@@ -7,12 +6,12 @@ import FractalSettings from "./FractalSettings";
 import GradientSettings from "./GradientSettings";
 
 type Props = {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
   downloadImage: () => void;
 };
 
-const Sidebar = ({ downloadImage }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const Sidebar = ({ downloadImage, isOpen, setIsOpen }: Props) => {
   return (
     <nav className={`navbar ${isOpen && "navbar-open"}`}>
       <ul className="navbar-nav">

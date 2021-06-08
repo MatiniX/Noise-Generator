@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../context";
 import { getImageData } from "../Noise/imageGenerator";
+import { MapInteractionCSS } from "react-map-interaction";
 
 type Props = {
+  isSidebarOpen: boolean;
   canvasRef: React.MutableRefObject<HTMLCanvasElement>;
 };
 
-const ImageCanvas = ({ canvasRef }: Props) => {
+const ImageCanvas = ({ canvasRef, isSidebarOpen }: Props) => {
   // Get values from context
   const {
     noiseType,
@@ -72,9 +74,25 @@ const ImageCanvas = ({ canvasRef }: Props) => {
     useGradient,
   ]);
 
+  const [containerWidth, setContainerWidth] = useState("width: calc(100% - 5rem)");
+  const [margin, setMargin] = useState("5rem");
+  useEffect(() => {
+    if (isSidebarOpen) {
+      setContainerWidth("calc(100% - 18rem)");
+      setMargin("18rem");
+    } else {
+      setContainerWidth("calc(100% - 5rem)");
+      setMargin("5rem");
+    }
+  }, [isSidebarOpen]);
+
   return (
-    <div className="canvas-container">
-      <canvas ref={canvasRef} width={resolution} height={resolution}></canvas>
+    <div className="map-container" style={{ width: containerWidth, marginLeft: margin }}>
+      <MapInteractionCSS minScale={0.05} maxScale={10}>
+        <div className="canvas-container">
+          <canvas ref={canvasRef} width={resolution} height={resolution}></canvas>
+        </div>
+      </MapInteractionCSS>
     </div>
   );
 };

@@ -8,6 +8,7 @@
   --bg-input: #313645;
   --scrollbar-thumb: #332a3b;
   --scrollbar-track: #2a333b;
+  --sidebar-transition: 200ms ease;
 }
 
 *,
@@ -24,10 +25,6 @@ body {
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-color: #333;
 }
 
@@ -49,8 +46,8 @@ label {
   color: #fff;
 }
 .canvas-container {
-  width: 512px;
-  height: 512px;
+  width: 100%;
+  height: 100%;
 }
 
 /* Scrollbar */
@@ -87,7 +84,7 @@ label {
   background-color: var(--bg-primary);
   top: 0;
   left: 0;
-  transition: width 200ms ease;
+  transition: width var(--sidebar-transition);
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -360,3 +357,13 @@ select:focus + .focus {
   left: 1rem;
 }
 /* --- */
+
+.map-test {
+  background-color: #2dcdfd;
+  height: 100vh;
+  width: calc(100vw - 18rem);
+}
+.map-container {
+  height: 100vh;
+  transition: all var(--sidebar-transition);
+}

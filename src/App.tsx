@@ -1,10 +1,11 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import ImageCanvas from "./components/ImageCanvas";
-import { useGlobalContext } from "./context";
+import GLSLCanvas from "./components/GLSLCanvas";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // downloads current noise texture as .png
   const downloadImage = () => {
@@ -17,13 +18,10 @@ function App() {
 
   return (
     <div>
-      <Sidebar downloadImage={downloadImage} />
+      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} downloadImage={downloadImage} />
 
-      <br />
-
-      <ImageCanvas canvasRef={canvasRef} />
-
-      <br />
+      {/* <ImageCanvas canvasRef={canvasRef} isSidebarOpen={isSidebarOpen} /> */}
+      <GLSLCanvas canvasRef={canvasRef} isSidebarOpen={isSidebarOpen}></GLSLCanvas>
     </div>
   );
 }
