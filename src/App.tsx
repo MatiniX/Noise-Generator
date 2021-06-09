@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import ImageCanvas from "./components/ImageCanvas";
-import GLSLCanvas from "./components/GLSLCanvas";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -20,8 +19,7 @@ function App() {
     <div>
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} downloadImage={downloadImage} />
 
-      {/* <ImageCanvas canvasRef={canvasRef} isSidebarOpen={isSidebarOpen} /> */}
-      <GLSLCanvas canvasRef={canvasRef} isSidebarOpen={isSidebarOpen}></GLSLCanvas>
+      <ImageCanvas canvasRef={canvasRef} isSidebarOpen={isSidebarOpen} />
     </div>
   );
 }
