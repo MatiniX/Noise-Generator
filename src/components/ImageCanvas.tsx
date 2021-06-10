@@ -30,6 +30,7 @@ const ImageCanvas = ({ canvasRef, isSidebarOpen }: Props) => {
 
     let imageData: ImageData;
 
+    const start = performance.now();
     // get the image data with or without gradient
     if (useGradient) {
       imageData = getImageData(
@@ -57,6 +58,9 @@ const ImageCanvas = ({ canvasRef, isSidebarOpen }: Props) => {
         persistance
       );
     }
+
+    const elapsed = performance.now() - start;
+    console.log(elapsed);
 
     ctx.putImageData(imageData, 0, 0);
   }, [

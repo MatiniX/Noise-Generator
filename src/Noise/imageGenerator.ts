@@ -30,6 +30,11 @@ const getImageData = (
       point.x += offsetX;
       point.y += offsetY;
 
+      // make sure we dont get out of index error when using worley noise
+      if (noiseType === NoiseType.Worley) {
+        dimension = 1;
+      }
+
       const noiseFunction = Noise.noiseFunctions[noiseType][dimension - 1];
       let val = Noise.Sum(noiseFunction, point, frequency, octaves, lacunarity, persistance);
 
@@ -53,6 +58,7 @@ const getImageData = (
   }
   return imageData;
 };
+
 const getUVImageData = (resolution: number, height: number) => {
   const imageData = new ImageData(resolution, height);
   const stepSize = 1 / resolution;
@@ -96,14 +102,18 @@ const getWorleyNoiseImageData = (resolution: number, height: number) => {
 
 const evaluateGradient = (gradient: { offset: string; color: string }[], t: number) => {
   // loop through each color and find start color and  end color for gradient
-  let startColor = "rgb(0, 0, 0)";
-  let endColor = "rgb(255, 255, 255)";
+  let startColor = gradient[0].color;
+  let endColor = gradient[gradient.length - 1].color;
 
-  for (let i = 0; i < gradient.length - 1; i++) {
+  for (let i = 0; i < gradient.length; i++) {
     const colorStop = gradient[i];
-    if (t >= parseFloat(colorStop.offset)) {
+    if (t > parseFloat(colorStop.offset)) {
       startColor = colorStop.color;
-      endColor = gradient[i + 1].color;
+      if (i === gradient.length - 1) {
+        endColor = gradient[i].color;
+      } else {
+        endColor = gradient[i + 1].color;
+      }
     }
   }
   return Color.lerp(new Color(startColor), new Color(endColor), t);

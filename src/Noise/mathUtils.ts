@@ -75,9 +75,9 @@ class Color {
   }
 
   public static lerp(c1: Color, c2: Color, t: number) {
-    const interpolR = Math.round(lerp(c1.r, c2.r, t));
-    const interpolG = Math.round(lerp(c1.g, c2.g, t));
-    const interpolB = Math.round(lerp(c1.b, c2.b, t));
+    const interpolR = c1.r + (c2.r - c1.r) * t;
+    const interpolG = c1.g + (c2.g - c1.g) * t;
+    const interpolB = c1.b + (c2.b - c1.b) * t;
 
     return new Color(interpolR, interpolG, interpolB, 1);
   }

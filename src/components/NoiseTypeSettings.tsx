@@ -12,7 +12,7 @@ type Props = {
 
 const NoiseTypeSettings = ({ openSidebar, isSidebarOpen }: Props) => {
   const [open, setOpen] = useState(false);
-  const { setNoiseType, setDimension } = useGlobalContext();
+  const { noiseType, setNoiseType, setDimension } = useGlobalContext();
 
   useEffect(() => {
     if (open && !isSidebarOpen) {
@@ -24,19 +24,15 @@ const NoiseTypeSettings = ({ openSidebar, isSidebarOpen }: Props) => {
     switch (e.target.value) {
       case "value":
         setNoiseType(NoiseType.Value);
-        console.log("set to value");
         break;
       case "perlin":
         setNoiseType(NoiseType.Perlin);
-        console.log("set to perlin");
         break;
       case "simplex":
         setNoiseType(NoiseType.Simplex);
-        console.log("set to simplex");
         break;
       case "worley":
         setNoiseType(NoiseType.Worley);
-        console.log("set to worley");
         break;
 
       default:
@@ -77,18 +73,21 @@ const NoiseTypeSettings = ({ openSidebar, isSidebarOpen }: Props) => {
           </div>
         </div>
 
-        <div className="input-container">
-          <label htmlFor="noiseType" className="label">
-            Dimension:
-          </label>
-          <div className="select">
-            <select name="dimension" id="dimesnion" onChange={handleDimensionChange}>
-              <option value={1}>1D</option>
-              <option value={2}>2D</option>
-            </select>
-            <span className="focus"></span>
+        {noiseType !== NoiseType.Worley && (
+          <div className="input-container">
+            <label htmlFor="noiseType" className="label">
+              Dimension:
+            </label>
+            <div className="select">
+              <select name="dimension" id="dimesnion" onChange={handleDimensionChange}>
+                <option value={1}>1D</option>
+                <option value={2}>2D</option>
+              </select>
+              <span className="focus"></span>
+            </div>
           </div>
-        </div>
+        )}
+
         <div className="underline"></div>
       </Collapsible>
     </li>
