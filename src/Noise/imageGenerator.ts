@@ -106,14 +106,13 @@ const evaluateGradient = (gradient: { offset: string; color: string }[], t: numb
   let endColor = gradient[gradient.length - 1].color;
 
   for (let i = 0; i < gradient.length; i++) {
-    const colorStop = gradient[i];
-    if (t > parseFloat(colorStop.offset)) {
-      startColor = colorStop.color;
-      if (i === gradient.length - 1) {
-        endColor = gradient[i].color;
-      } else {
-        endColor = gradient[i + 1].color;
-      }
+    const currentColorStop = gradient[i];
+
+    if (Number(currentColorStop.offset) <= t) {
+      startColor = currentColorStop.color;
+    } else if (Number(currentColorStop.offset) > t) {
+      endColor = currentColorStop.color;
+      break;
     }
   }
   return Color.lerp(new Color(startColor), new Color(endColor), t);

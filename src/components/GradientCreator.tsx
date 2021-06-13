@@ -3,8 +3,6 @@ import { ChromePicker } from "react-color";
 import { GradientPickerPopover } from "react-linear-gradient-picker";
 import { useGlobalContext } from "../context";
 
-// refactor this part so it si more typescript commpilant
-
 const rgbToRgba = (rgb: any, a = 1) => {
   return rgb.replace("rgb(", "rgba(").replace(")", `, ${a})`);
 };

@@ -28,7 +28,7 @@ interface AppContextInterface {
 
 const AppContext = React.createContext<AppContextInterface>(undefined!);
 
-const AppProvider = ({ children }: any) => {
+const AppProvider: React.FC = ({ children }) => {
   const [noiseType, setNoiseType] = useState(NoiseType.Value);
   const [dimension, setDimension] = useState(1);
   const [frequency, setFrequency] = useState(4);
