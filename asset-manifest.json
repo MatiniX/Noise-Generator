@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/noise-generator/static/css/main.6c18c9c2.chunk.css",
+    "main.js": "/noise-generator/static/js/main.90293191.chunk.js",
+    "main.js.map": "/noise-generator/static/js/main.90293191.chunk.js.map",
+    "runtime-main.js": "/noise-generator/static/js/runtime-main.dff199d9.js",
+    "runtime-main.js.map": "/noise-generator/static/js/runtime-main.dff199d9.js.map",
+    "static/js/2.3af73b5d.chunk.js": "/noise-generator/static/js/2.3af73b5d.chunk.js",
+    "static/js/2.3af73b5d.chunk.js.map": "/noise-generator/static/js/2.3af73b5d.chunk.js.map",
+    "index.html": "/noise-generator/index.html",
+    "static/css/main.6c18c9c2.chunk.css.map": "/noise-generator/static/css/main.6c18c9c2.chunk.css.map",
+    "static/js/2.3af73b5d.chunk.js.LICENSE.txt": "/noise-generator/static/js/2.3af73b5d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.dff199d9.js",
+    "static/js/2.3af73b5d.chunk.js",
+    "static/css/main.6c18c9c2.chunk.css",
+    "static/js/main.90293191.chunk.js"
+  ]
+}
