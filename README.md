@@ -1,46 +1,46 @@
-# Getting Started with Create React App
+# Noise Generator
+A simple noise generator build using React and TypeScript
+## Usage
+You can create your own noise based on some configurable option that are availible to you.
+#### 1. Noise Type
+You can choose from 4 noise types:
+1. Value
+2. Perlin
+3. Simplex
+4. Worley
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+There are 1D and 2D version for every noise type except Worley (this noise type is not defined in 1D)
 
-## Available Scripts
+#### 2. Offset and Scale
+You can change offset of the sampled noise along both axis independently.
 
-In the project directory, you can run:
+Frequency setting allows you to change the frequency of sampled noise effectively changing the scale of the sample.
 
-### `npm start`
+You can also choose resolution which suits your needs. Supported resolution are exponents of 2 starting from 16x16 up to 2048x2048. Resolution you choose will affect the final downloaded image.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### 3. Fractal Settings
+Fractal noise is supported for every noise type.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+You can configure all the basic fractal settings:
+1. Octaves - number of samples included in the final sample (1-8)
+2. Lacunarity - factor by which is frequency scaled for each next ocatve (1-4)
+3. Persistance - factor by which is the amplitude scaled for each next octave (0-1)
 
-### `npm test`
+#### 4. Gradient Settings
+This setting enables you to color the final texture bassed on the sample values.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### 5. Download button
+Simply downloads the current texture as .png file.
 
-### `npm run build`
+### Performance
+All computation are done synchronously on CPU. So if you experience large performance issues try to lower the resolution or turning off sampling gradient in Gradient Settings.
+There were attempts to make noise sampling more performant, unfortunately they were unsuccsessful.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Info
+App was build as an learning project. I am still pretty much beginner to React and building applications. There is minimum of external libraries and components used only the Gradient picker and abilty to zoom and pan the texture are build with help of some externals. All the code and CSS was created by me with a little bit of help from the internet (mainly CSS). Feel free to create, download and use noise texture in your projects.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Sources
+Implementation of noise algorithms would not be possible without these great sources:
+https://catlikecoding.com/unity/tutorials/pseudorandom-noise/old.html
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+https://thebookofshaders.com/
