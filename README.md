@@ -1,5 +1,7 @@
 # Noise Generator
-A simple noise generator build using React and TypeScript
+A simple noise generator build using React and TypeScript 
+
+https://matinix.github.io/Noise-Generator/
 ## Usage
 You can create your own noise based on some configurable option that are availible to you.
 #### 1. Noise Type
